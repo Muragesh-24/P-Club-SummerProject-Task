@@ -30,6 +30,63 @@ const placeSchema = new mongoose.Schema({
       default: Date.now
     }
   });
+  const userSc= new mongoose.Schema({
+    name: String,
+    email: String,
+    password: String,
+    createdAt: {
+      type: Date,
+      default: Date.now
+    }
+    
+  })
+  const User=mongoose.model("User",userSc)
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+  app.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+  
+    try {
+      const user = await User.findOne({ email });
+  
+      if (!user) {
+        return res.status(400).json({ message: "User not found" });
+      }
+  
+      if (user.password !== password) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+  
+      // For now, just respond with user info (don’t send password)
+      return res.json({
+        message: "Login successful",
+        user: {
+          name: user.name,
+          email: user.email,
+        },
+      });
+    } catch (err) {
+      res.status(500).json({ message: "Server error", error: err.message });
+    }
+  });
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+app.post("/register", async (req, res) => {
+  const { name, email, password } = req.body;
+
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ message: "User already exists" });
+    }
+
+    const newUser = new User({ name, email, password });
+    await newUser.save();
+
+    res.status(201).json({ message: "User registered successfully", user: { name, email } });
+  } catch (err) {
+    res.status(500).json({ message: "Error creating user", error: err.message });
+  }
+});
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   app.post("/review", async (req, res) => {
     const {latitude,longitude,message } = req.body;
     console.log(latitude, longitude, message);

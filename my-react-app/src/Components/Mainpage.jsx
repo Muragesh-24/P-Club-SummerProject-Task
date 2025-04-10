@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './Components.css';
 import maplibregl from 'maplibre-gl';
+import Navbar from './Navbar';
 
 function Mainpage() {
   const mapContainer = useRef(null);
@@ -125,7 +126,9 @@ function Mainpage() {
 
   return (
     <>
+      <Navbar/>
       <div className="control">
+    
         <button onClick={() => {
           alert("Click on the map to add a new place");
           setAddingPlace(true);
