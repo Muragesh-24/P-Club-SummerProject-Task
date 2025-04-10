@@ -1,0 +1,46 @@
+.nav {
+    height: 20vh;
+    width: 100%;
+    background-color: #1e1e2f;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', sans-serif;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .nav h1 {
+    font-size: 2.5rem;
+    margin: 0;
+    color: #00ccff;
+  }
+  
+  .nav p {
+    margin-top: 0.5rem;
+    font-size: 1.2rem;
+    color: #ccc;
+  }
+  
+
+.map-container{
+    height: auto;
+    min-height: 70vh;
+    background-color: #b8b4af;
+    width: 100vw;
+    color: black;
+ 
+}
+.control{
+    height: 10vh;
+    width: 100vw;
+    background-color: #1e1e2f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.control button{
+ 
+    margin-right: 2rem;
+}
