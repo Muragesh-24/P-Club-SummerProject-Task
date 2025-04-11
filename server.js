@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json()); 
 
 const PORT = process.env.PORT || 5000;
-const SECRET_KEY = process.env.JWT_SECRET || "secret123"
+const SECRET_KEY ="secret123"
 
 
 
@@ -59,63 +59,60 @@ const placeSchema = new mongoose.Schema({
   
 
 
-app.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
+  app.post('/login', async (req, res) => {
+    try {
+      const { email, password } = req.body;
   
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(400).json({ message: "User not found" });
-    }
-
-   
-    const isMatch = await bcrypt.compare(password, user.password);  
-
-    if (isMatch) {
-      console.log('Password matched!');
+      // Find the user by email
+      const user = await User.findOne({ email });
       
-    
-      const token = jwt.sign({ username: user.email }, SECRET_KEY, { expiresIn: '1h' });
-
-     
-      return res.json({
-        message: "Login successful",
-        token: token
-      });
-
-    } else {
-      console.log('Incorrect password!');
-      return res.status(400).json({ message: "Incorrect password" });
+      if (!user) {
+        return res.status(400).json({ message: 'User not found' });
+      }
+  
+      console.log("going to check")
+      console.log(password)
+      console.log(user.password)  
+      // Compare the plain password with the hashed password from the DB
+      const isMatch = await bcrypt.compare(password, user.password); // user.password is the hashed password
+  
+      if (!isMatch) {
+        return res.status(400).json({ message: 'Invalid credentials' });
+      }
+  
+      // If passwords match, generate and return a token
+      const token = jwt.sign({ id: user._id }, SECRET_KEY, { expiresIn: '1h' });
+      return res.json({ token });
+  
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Server error' });
     }
-
-  } catch (err) {
-    console.error('Error during login:', err);
-    return res.status(500).json({ message: "Server error", error: err.message });
-  }
-});
-
-app.post("/register", async (req, res) => {
-  const { name, email, password } = req.body;
-  const haspass=hashPassword(password)
-
-  try {
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(409).json({ message: "User already exists" });
+  });
+  app.post("/register", async (req, res) => {
+    const { name, email, password } = req.body;
+  
+    try {
+      // Hash the password before saving the user
+      const hashedPassword = await hashPassword(password); // Await the hashed password
+  
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        return res.status(409).json({ message: "User already exists" });
+      }
+  
+      // Use the hashed password
+      const newUser = new User({ name, email, password: hashedPassword });  // Use password as hashedPassword
+      await newUser.save();
+  
+      const token = jwt.sign({ username: email }, SECRET_KEY, { expiresIn: '1h' });
+      
+      res.status(201).json({ message: "User registered successfully", token });
+    } catch (err) {
+      res.status(500).json({ message: "Error creating user", error: err.message });
     }
-
-    const newUser = new User({ name, email, haspass });
-    await newUser.save();
-    const token = jwt.sign({ username: email }, SECRET_KEY, { expiresIn: '1h' });
-    
-    res.status(201).json({ message: "User registered successfully", token:token});
-  } catch (err) {
-    res.status(500).json({ message: "Error creating user", error: err.message });
-  }
-});
-
+  });
+  
 app.get('/verify-token', (req, res) => {
   console.log("recevid")
   const authHeader = req.headers.authorization;
@@ -126,10 +123,11 @@ app.get('/verify-token', (req, res) => {
   console.log(token)
   try {
     console.log("decode started%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-    const decoded = jwt.verify(token, SECRET_KEY);
+    const decoded = jwt.verify(token,SECRET_KEY);
     console.log(decoded)
     return res.json({ success: true, user: decoded });
   } catch (err) {
+    console.log(err)
     return res.json({ success: false });
   }
 });

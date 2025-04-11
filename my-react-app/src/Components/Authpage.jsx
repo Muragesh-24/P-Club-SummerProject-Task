@@ -2,16 +2,15 @@ import React, { useState } from 'react';
 import './Authpage.css';
 import { useNavigate } from 'react-router-dom';
 
-
 function Authpage() {
   const navigate = useNavigate();
   const [activeForm, setActiveForm] = useState('login');
 
-
+  // Login state
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
 
-
+  // Registration state
   const [regName, setRegName] = useState('');
   const [regEmail, setRegEmail] = useState('');
   const [regPassword, setRegPassword] = useState('');
@@ -21,7 +20,7 @@ function Authpage() {
     setActiveForm(formType);
   };
 
-
+  // Handle Login
   const controlLog = async (e) => {
     e.preventDefault(); 
 
@@ -36,21 +35,21 @@ function Authpage() {
       }),
     });
 
-    
     if (response.ok) {
-      const token=data.token
-      localStorage.setItem("token",token)
-      navigate("/main")
+      const data = await response.json();
+      const token = data.token;
+      localStorage.setItem("token", token);
+      navigate("/main");
       alert('Login successful!');
-      setLoginEmail("")
-      setLoginPassword("")
-      console.log(data);
+      setLoginEmail('');
+      setLoginPassword('');
     } else {
+      const data = await response.json();
       alert(data.message || 'Login failed');
     }
   };
 
-
+  // Handle Registration
   const controlReg = async (e) => {
     e.preventDefault();
 
@@ -73,16 +72,15 @@ function Authpage() {
 
     const data = await response.json();
     if (response.ok) {
-      const token=data.token
-      localStorage.setItem("token",token)
+      const token = data.token;
+      localStorage.setItem("token", token);
       alert('Registered successfully!');
-      navigate("/main")
-      setRegName("")
-      setRegEmail("")
-      setRegPassword("")
-      setRegConfirmPassword("")
-  
-      setActiveForm('login');
+      navigate("/main");
+      setRegName('');
+      setRegEmail('');
+      setRegPassword('');
+      setRegConfirmPassword('');
+      setActiveForm('login');  // Switch back to login form after successful registration
     } else {
       alert(data.message || 'Registration failed');
     }
