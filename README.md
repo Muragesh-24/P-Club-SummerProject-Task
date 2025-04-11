@@ -22,7 +22,7 @@ Follow these steps to run the application on your local machine:
 Clone the repository to your local machine:<br>
 
 node server.js<br>
-cd <my-react-app><br>
+cd my-react-app<br>
 npm install<br>
 npm run dev<br>
 
