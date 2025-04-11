@@ -18,10 +18,11 @@ Before you can run the application, make sure you have the following installed:
 ## Getting Started:
 Follow these steps to run the application on your local machine:
 
-### 1. Clone the Repository
-Clone the repository to your local machine:
-node server.js
-cd <my-react-app>
-npm install
-npm run dev
+### 1. Clone the Repository<cd>
+Clone the repository to your local machine:<br>
+
+node server.js<br>
+cd <my-react-app><br>
+npm install<br>
+npm run dev<br>
 
