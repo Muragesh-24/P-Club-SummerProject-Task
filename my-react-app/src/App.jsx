@@ -1,35 +1,25 @@
-import './index.css'
-import App from './App.jsx'
-import Authpage from './Components/Authpage.jsx'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-
-
-
-
-
-
-import React from 'react'
+import './index.css';
+import Authpage from './Components/Authpage.jsx';
 import Mainpage from './Components/Mainpage.jsx';
+import ProtectedRoute from './Components/ProtectedRoute.jsx'; // 👈 import
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-function main() {
-
-  const user=true; // many ways are there but here like use webtoken and save it in locan storage or cooki  then while checking this user a api call will go to backend where it will check where the user present in the  token will be verified 
-     return (
-   
-       <Router>
+function Main() {
+  return (
+    <Router>
       <Routes>
-    
-        <Route path="/" element={<Authpage/>} />
-
-       
+        <Route path="/" element={<Authpage />} />
         <Route
           path="/main"
-          element={user ? <Mainpage/> : <Navigate to="/" />}
+          element={
+            <ProtectedRoute>
+              <Mainpage />
+            </ProtectedRoute>
+          }
         />
       </Routes>
     </Router>
-   
-  )
+  );
 }
 
-export default main
+export default Main;

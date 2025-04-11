@@ -134,10 +134,6 @@ function Mainpage() {
           setAddingPlace(true);
         }}>Add Place</button>
 
-        <button onClick={() => {
-          alert("Click a place to add review");
-          setAddingReview(true);
-        }}>Review</button>
       </div>
       <div className="map-container" ref={mapContainer} />
     </>

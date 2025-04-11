@@ -36,8 +36,10 @@ function Authpage() {
       }),
     });
 
-    const data = await response.json();
+    
     if (response.ok) {
+      const token=data.token
+      localStorage.setItem("token",token)
       navigate("/main")
       alert('Login successful!');
       setLoginEmail("")
@@ -71,6 +73,8 @@ function Authpage() {
 
     const data = await response.json();
     if (response.ok) {
+      const token=data.token
+      localStorage.setItem("token",token)
       alert('Registered successfully!');
       navigate("/main")
       setRegName("")
