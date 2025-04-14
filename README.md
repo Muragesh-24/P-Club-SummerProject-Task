@@ -21,7 +21,7 @@ Follow these steps to run the application on your local machine:
 ### 1. Clone the Repository<cd>
 Clone the repository to your local machine:<br>
 
-Start the mongodb server and use the corresponding Connection string
+Start the mongodb server and use the corresponding Connection string<br>
 node server.js<br>
 cd my-react-app<br>
 npm install<br>
